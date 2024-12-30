@@ -3,8 +3,10 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-src/main/resources/static/
-src/main/resources/templates/
+src/main/resources/static/*
+!src/main/resources/static/.gitkeep
+src/main/resources/templates/*
+!src/main/resources/templates/.gitkeep
 
 ### STS ###
 .apt_generated
