@@ -9,17 +9,17 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CartRepository extends JpaRepository<Cart, Integer> {
-    Cart findByUserId(int userId);
+public interface CartRepository extends JpaRepository<Cart, Long> {
+    Cart findByUserId(Long userId);
 
     @Query("SELECT COALESCE(SUM(p.price * ci.quantityBuy), 0) " +
             "FROM CartItem ci " +
             "JOIN ci.product p " +
             "WHERE ci.cart.id = :cartId")
-    int calculateTotal(@Param("cartId") int cartId);
+    int calculateTotal(@Param("cartId") Long cartId);
 
     @Modifying
     @Transactional
     @Query(value = "UPDATE carts c SET c.total = :total WHERE c.id = :cartId", nativeQuery = true)
-    void updateCartTotal(@Param("cartId") int cartId, @Param("total") int total);
+    void updateCartTotal(@Param("cartId") Long cartId, @Param("total") double total);
 }

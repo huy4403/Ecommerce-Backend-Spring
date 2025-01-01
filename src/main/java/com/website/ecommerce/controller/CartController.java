@@ -15,14 +15,14 @@ public class CartController {
     private CartService cartService;
 
     @PutMapping("update/{id}")
-    public ResponseEntity<Cart> updateCart(@PathVariable("id") int id, @RequestBody Cart cart) {
+    public ResponseEntity<Cart> updateCart(@PathVariable("id") Long id, @RequestBody Cart cart) {
         cart.setId(id);
         Cart updateCart = cartService.updateCart(cart);
         return new ResponseEntity<>(updateCart, HttpStatus.OK);
     }
 
     @GetMapping("{userId}")
-    public ResponseEntity<Cart> getCartByUserId(@PathVariable("userId") int userId) {
+    public ResponseEntity<Cart> getCartByUserId(@PathVariable("userId") Long userId) {
         Cart cart = cartService.getCartByUserId(userId);
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }

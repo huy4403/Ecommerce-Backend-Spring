@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "cart_items")
-public class CartItem {
+public class CartItem extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "cart_id", referencedColumnName = "id")
@@ -29,12 +29,4 @@ public class CartItem {
 
     @Column(name ="quantityBuy")
     private int quantityBuy;
-
-    @CreationTimestamp
-    @Column(name = "createdAt", updatable = false, nullable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updatedAt", nullable = false)
-    private LocalDateTime updatedAt;
 }

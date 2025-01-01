@@ -8,7 +8,7 @@ public interface CartService {
 
     Cart updateCart(Cart cart);
 
-    void updateTotalCart(int cartId);
+    void updateTotalCart(Long cartId);
 
-    Cart getCartByUserId(int id);
+    Cart getCartByUserId(Long id);
 }

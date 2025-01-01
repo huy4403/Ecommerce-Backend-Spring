@@ -14,11 +14,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "products")
-public class Product {
+public class Product extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -27,10 +27,10 @@ public class Product {
     private int quantity = -1;
 
     @Column(name = "import_price", nullable = false)
-    private int importPrice = -1;
+    private double importPrice = -1;
 
     @Column(name = "price", nullable = false)
-    private int price = -1;
+    private double price = -1;
 
     @Column(name = "img", nullable = false)
     private String img;
@@ -41,12 +41,4 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
-
-    @CreationTimestamp
-    @Column(name = "createdAt", updatable = false, nullable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updatedAt", nullable = false)
-    private LocalDateTime updatedAt;
 }

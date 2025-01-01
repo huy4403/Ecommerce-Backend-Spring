@@ -10,7 +10,10 @@ public class UserRegistrationDTO {
 
     @NotBlank(message = "Tên không được để trống!")
     @Size(min = 3, message = "Tên phải có độ dài từ 3 ký tự trở lên!")
-    @Pattern(regexp = "^[a-zA-ZàáạảãèéẹẻẽêếềệễỉíịìĩòóọỏõôốồổỗơớờởỡúùụủũưứừửữỳýỵỷỹđÀÁẠẢÃÈÉẸẺẼÊẾỀỆỄÌÍỊÌĨÒÓỌỎÕÔỐỒỔỖƠỚỜỞỠÚÙỤỦŨƯỨỪỬỮỲÝỴỶỸĐ ]+$", message = "Tên chỉ được chứa chữ cái (a-z, A-Z) và dấu cách!")
+    @Pattern(
+            regexp = "^[a-zA-ZàáâãèéêìíòóôõùúýăđĩũơưăằắẳẵặèẻẽềềếệỉịòỏõốồổỗờớởỡùụủũưứừửữỳýỵỷỹÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝĂĐĨŨƠƯĂẰẮẲẴẶÈẺẼỀỀẾỆỈỊÒỎÕỐỒỔỖỜỚỞỠÙỤỦŨƯỨỪỬỮỲÝỴỶỸ ]+$",
+            message = "Tên chỉ được chứa chữ cái (a-z, A-Z) và dấu cách!"
+    )
     private String name;
 
     @NotBlank(message = "Tên tài khoản không được để trống!")
@@ -44,10 +47,12 @@ public class UserRegistrationDTO {
     @Past(message = "Ngày sinh phải là một ngày trong quá khứ")
     private LocalDate birthday;
 
+    private String roleName = "USER";
+
     public UserRegistrationDTO() {
     }
 
-    public UserRegistrationDTO(String name, String username, String password, String passwordcomfirm, String phone, String email, String gender, LocalDate birthday) {
+    public UserRegistrationDTO(String name, String username, String password, String passwordcomfirm, String phone, String email, String gender, LocalDate birthday, String roleName) {
         this.name = name;
         this.username = username;
         this.password = password;
@@ -56,6 +61,7 @@ public class UserRegistrationDTO {
         this.email = email;
         this.gender = gender;
         this.birthday = birthday;
+        this.roleName = roleName;
     }
 
     public String getName() {
@@ -120,5 +126,13 @@ public class UserRegistrationDTO {
 
     public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 }

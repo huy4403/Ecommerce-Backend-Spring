@@ -78,12 +78,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void deleteProduct(int id){
+    public void deleteProduct(Long id){
         productRepository.deleteById(id);
     }
 
     @Override
-    public Product getProductById(int id) {
+    public Product getProductById(Long id) {
         Optional<Product> product = productRepository.findById(id);
         return product.get();
     }
@@ -124,13 +124,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Boolean existsProductByNameDiffId(String name, int id) {
+    public Boolean existsProductByNameDiffId(String name, Long id) {
         return productRepository.existsProductByNameDiffId(name, id);
     }
 
     @Override
-    public int countAllProducts() {
-        int count = productRepository.countAllProducts();
+    public Long countAllProducts() {
+        Long count = productRepository.countAllProducts();
         return count;
     }
 }

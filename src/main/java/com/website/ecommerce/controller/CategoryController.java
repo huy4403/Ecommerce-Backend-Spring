@@ -16,20 +16,20 @@ import java.util.List;
 public class CategoryController {
     private CategoryService categoryService;
 
-    @PostMapping
+    @PostMapping("admin/create")
     public ResponseEntity<Category> createCategory(@RequestBody Category category) {
         Category createCategory = categoryService.createCategory(category);
         return new ResponseEntity<>(createCategory, HttpStatus.CREATED);
     }
 
-    @PutMapping("update/{id}")
+    @PutMapping("admin/update/{id}")
     public ResponseEntity<Category> updateCategory(@PathVariable("id") int id, @RequestBody Category category) {
         category.setId(id);
         Category updateCategory = categoryService.updateCategory(category);
         return new ResponseEntity<>(updateCategory, HttpStatus.OK);
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("admin/delete/{id}")
     public ResponseEntity<String> deleteCategory(@PathVariable int id) {
         categoryService.deleteCategory(id);
         return new ResponseEntity<String>("Đẫ xóa thành công category", HttpStatus.OK);

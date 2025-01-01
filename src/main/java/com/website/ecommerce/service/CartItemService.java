@@ -11,17 +11,17 @@ public interface CartItemService {
 
     CartItem updateCartItem(CartItem cartItem);
 
-    void deleteCartItem(int id);
+    void deleteCartItem(Long id);
 
-    List<CartItem> getCartItemsByCartId(int cartId);
+    List<CartItem> getCartItemsByCartId(Long cartId);
 
-    CartItem findCartItemById(int id);
+    CartItem findCartItemById(Long id);
 
-    int quantityByCartIdAndProductId(int cartId, int productId);
+    int quantityByCartIdAndProductId(Long cartId, Long productId);
 
     CartItem updateCartItemQuantityBuy(CartItem cartItem);
 
-    CartItem findCartItemByCartIdAndProductId(int cartId, int productId);
+    CartItem findCartItemByCartIdAndProductId(Long cartId, Long productId);
 
-    CartItem upDownQuantity(int id, int quantity);
+    CartItem upDownQuantity(Long id, int quantity);
 }

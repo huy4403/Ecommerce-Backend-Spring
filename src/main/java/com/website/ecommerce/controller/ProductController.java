@@ -29,15 +29,15 @@ public class ProductController {
     @Autowired
     private StorageService storageService;
 
-    @PostMapping
+    @PostMapping("admin/create")
     public ResponseEntity<?> createProduct(@Valid @ModelAttribute ProductCreateDTO productDto,
                                            @RequestParam("img") MultipartFile img) {
         Product createdProduct = productService.createProduct(productDto, img);
         return ResponseEntity.status(HttpStatus.OK).body(createdProduct);
     }
 
-    @PutMapping("update/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable("id") int id, @ModelAttribute Product product, @RequestParam(value = "file", required = false) MultipartFile file) {
+    @PutMapping("admin/update/{id}")
+    public ResponseEntity<?> updateProduct(@PathVariable("id") Long id, @ModelAttribute Product product, @RequestParam(value = "file", required = false) MultipartFile file) {
         boolean existProductByNameDiffId = productService.existsProductByNameDiffId(product.getName(), id);
         if (existProductByNameDiffId) {
             Map<String, String> errorResponse = new HashMap<>();
@@ -53,8 +53,8 @@ public class ProductController {
         return new ResponseEntity<>(updateProduct, HttpStatus.OK);
     }
 
-    @DeleteMapping("delete/{id}")
-    public ResponseEntity<?> deleteProduct(@PathVariable("id") int id) {
+    @DeleteMapping("admin/delete/{id}")
+    public ResponseEntity<?> deleteProduct(@PathVariable("id") Long id) {
         productService.deleteProduct(id);
         return new ResponseEntity<>("Xóa thành công sản phẩm", HttpStatus.OK);
     }
@@ -102,7 +102,7 @@ public class ProductController {
 
     @GetMapping("/pagination")
     public ResponseEntity<?> countAllProducts(){
-        int count = productService.countAllProducts();
+        Long count = productService.countAllProducts();
         return new ResponseEntity<>(count, HttpStatus.OK);
     }
 }

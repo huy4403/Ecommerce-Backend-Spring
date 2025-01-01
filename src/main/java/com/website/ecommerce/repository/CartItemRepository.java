@@ -8,11 +8,11 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
-    List<CartItem> findByCartId(int cartId);
+public interface CartItemRepository extends JpaRepository<CartItem, Long> {
+    List<CartItem> findByCartId(Long cartId);
 
     @Query("SELECT c.quantityBuy FROM CartItem c WHERE c.cart.id = :cartId AND c.product.id = :productId")
-    Integer quantityByCartIdAndProductId(@Param("cartId") int cartId, @Param("productId") int productId);
+    Integer quantityByCartIdAndProductId(@Param("cartId") Long cartId, @Param("productId") Long productId);
 
-    CartItem findByCartIdAndProductId(int cartId, int productId);
+    CartItem findByCartIdAndProductId(Long cartId, Long productId);
 }

@@ -34,12 +34,12 @@ public class CartItemController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteCartItem(@PathVariable("id") int id) {
+    public ResponseEntity<String> deleteCartItem(@PathVariable("id") Long id) {
         cartItemService.deleteCartItem(id);
         return new ResponseEntity<>("Xóa thành công sản phẩm khỏi giỏ hàng",HttpStatus.OK);
     }
     @GetMapping("get-all/{cartId}")
-    public ResponseEntity<?> getCartItems(@PathVariable("cartId") int cartId) {
+    public ResponseEntity<?> getCartItems(@PathVariable("cartId") Long cartId) {
         List<CartItem> cartItems = cartItemService.getCartItemsByCartId(cartId);
         if(cartItems.isEmpty()) {
             Map<String, String> errorResponse = new HashMap<>();
@@ -50,13 +50,13 @@ public class CartItemController {
     }
 
     @GetMapping
-    public ResponseEntity<?> quantityByCartIdAndProductId(@RequestParam("cartId") int cartId, @RequestParam("productId") int productId) {
+    public ResponseEntity<?> quantityByCartIdAndProductId(@RequestParam("cartId") Long cartId, @RequestParam("productId") Long productId) {
         int quantity = cartItemService.quantityByCartIdAndProductId(cartId, productId);
         return new ResponseEntity<>(quantity, HttpStatus.OK);
     }
 
     @PutMapping("updownQuantity/{id}")
-    public ResponseEntity<?> upDownQuantity(@PathVariable("id") int id, @RequestBody int quantity) {
+    public ResponseEntity<?> upDownQuantity(@PathVariable("id") Long id, @RequestBody int quantity) {
         CartItem cartItem = cartItemService.upDownQuantity(id, quantity);
         return new ResponseEntity<>(cartItem, HttpStatus.OK);
     }

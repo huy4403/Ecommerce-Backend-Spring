@@ -16,9 +16,9 @@ public interface ProductService {
 
     Product updateProduct(Product product);
 
-    void deleteProduct(int id);
+    void deleteProduct(Long id);
 
-    Product getProductById(int id);
+    Product getProductById(Long id);
 
     List<Product> getAllProducts();
 
@@ -30,7 +30,7 @@ public interface ProductService {
 
     List<Product> findByNameContaining(String name);
 
-    Boolean existsProductByNameDiffId(String name, int id);
+    Boolean existsProductByNameDiffId(String name, Long id);
 
-    int countAllProducts();
+    Long countAllProducts();
 }

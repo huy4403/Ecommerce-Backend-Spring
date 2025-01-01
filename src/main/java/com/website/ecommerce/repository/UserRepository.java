@@ -4,10 +4,12 @@ import com.website.ecommerce.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, Long> {
     Boolean existsByUsername(String username);
+    Optional<User> findByUsername(String username);
     Boolean existsByPhone(String phone);
     Boolean existsByEmail(String email);
-    User findUserByUsernameAndPassword(String username, String password);
 }

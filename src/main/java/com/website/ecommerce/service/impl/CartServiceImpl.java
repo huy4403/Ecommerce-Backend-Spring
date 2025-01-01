@@ -6,8 +6,6 @@ import com.website.ecommerce.service.CartService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @AllArgsConstructor
 public class CartServiceImpl implements CartService {
@@ -27,13 +25,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void updateTotalCart(int cartId){
-        int total = cartRepository.calculateTotal(cartId);
+    public void updateTotalCart(Long cartId){
+        double total = cartRepository.calculateTotal(cartId);
         cartRepository.updateCartTotal(cartId, total);
     }
 
     @Override
-    public Cart getCartByUserId(int id) {
+    public Cart getCartByUserId(Long id) {
         Cart cart = cartRepository.findByUserId(id);
         return cart;
     }

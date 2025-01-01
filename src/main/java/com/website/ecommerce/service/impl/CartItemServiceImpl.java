@@ -49,26 +49,26 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public void deleteCartItem(int id) {
+    public void deleteCartItem(Long id) {
         CartItem cartItem = findCartItemById(id);
         cartItemRepository.deleteById(id);
         cartService.updateTotalCart(cartItem.getCart().getId());
     }
 
     @Override
-    public CartItem findCartItemById(int id){
+    public CartItem findCartItemById(Long id){
         Optional<CartItem> cartItem = cartItemRepository.findById(id);
         return cartItem.get();
     }
 
     @Override
-    public CartItem findCartItemByCartIdAndProductId(int cartId, int productId){
+    public CartItem findCartItemByCartIdAndProductId(Long cartId, Long productId){
         CartItem cartItem = cartItemRepository.findByCartIdAndProductId(cartId, productId);
         return cartItem;
     }
 
     @Override
-    public CartItem upDownQuantity(int id, int quantity) {
+    public CartItem upDownQuantity(Long id, int quantity) {
         CartItem existCartItem = findCartItemById(id);
         existCartItem.setQuantityBuy(existCartItem.getQuantityBuy() + quantity);
         CartItem updateCartItem = cartItemRepository.save(existCartItem);
@@ -77,13 +77,13 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public int quantityByCartIdAndProductId(int cartId, int productId) {
+    public int quantityByCartIdAndProductId(Long cartId, Long productId) {
         Integer quantity = cartItemRepository.quantityByCartIdAndProductId(cartId, productId);
         return (quantity != null) ? quantity : 0;
     }
 
     @Override
-    public List<CartItem> getCartItemsByCartId(int cartId) {
+    public List<CartItem> getCartItemsByCartId(Long cartId) {
         List<CartItem> cartItems = cartItemRepository.findByCartId(cartId);
         return cartItems;
     }

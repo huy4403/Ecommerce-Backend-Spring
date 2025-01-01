@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Integer> {
+public interface ProductRepository extends JpaRepository<Product, Long> {
     Boolean existsProductByName(String name);
 
     Product findProductByName(String name);
@@ -21,8 +21,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findByNameContaining(@Param("name") String name);
 
     @Query("SELECT COUNT(p) > 0 FROM Product p WHERE p.name = :name AND p.id != :id")
-    Boolean existsProductByNameDiffId(String name, int id);
+    Boolean existsProductByNameDiffId(String name, Long id);
 
     @Query("SELECT COUNT(p) FROM Product p")
-    Integer countAllProducts();
+    Long countAllProducts();
 }
