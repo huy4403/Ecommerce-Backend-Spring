@@ -2,7 +2,8 @@ package com.website.ecommerce.filter;
 
 import com.website.ecommerce.component.JwtProvider;
 import com.website.ecommerce.model.User;
-import com.website.ecommerce.service.UserService;
+import com.website.ecommerce.service.auth.AuthService;
+import com.website.ecommerce.service.client.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Autowired
     private JwtProvider jwtProvider;
     @Autowired
-    private UserService userService;
+    private AuthService authService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -31,7 +32,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             String token = GetJwt(request);
             if(token != null && jwtProvider.validateToken(token)) {
                 String username = jwtProvider.getUserNameFromToken(token);
-                User user = (User) userService.loadUserByUsername(username);
+                User user = (User) authService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         user, null, user.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

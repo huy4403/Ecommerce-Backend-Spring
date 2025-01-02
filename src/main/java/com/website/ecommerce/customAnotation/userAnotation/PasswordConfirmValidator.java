@@ -1,17 +1,17 @@
 package com.website.ecommerce.customAnotation.userAnotation;
 
-import com.website.ecommerce.dtos.userDTOs.UserRegistrationDTO;
+import com.website.ecommerce.dtos.authDTOs.AuthRegistrationDTO;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class PasswordConfirmValidator implements ConstraintValidator<PasswordConfirm, UserRegistrationDTO> {
+public class PasswordConfirmValidator implements ConstraintValidator<PasswordConfirm, AuthRegistrationDTO> {
 
     @Override
     public void initialize(PasswordConfirm constraintAnnotation) {
     }
 
     @Override
-    public boolean isValid(UserRegistrationDTO userDTO, ConstraintValidatorContext context) {
+    public boolean isValid(AuthRegistrationDTO userDTO, ConstraintValidatorContext context) {
         if (userDTO == null) {
             return true;  // Tránh NullPointerException
         }

@@ -1,16 +1,16 @@
 package com.website.ecommerce.customAnotation.productAnotation;
 
-import com.website.ecommerce.dtos.productDTOs.ProductCreateDTO;
+import com.website.ecommerce.dtos.adminDTOs.AdminCreateProductDTO;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class ComparePriceValidator implements ConstraintValidator<ComparePrice, ProductCreateDTO> {
+public class ComparePriceValidator implements ConstraintValidator<ComparePrice, AdminCreateProductDTO> {
 
     @Override
     public void initialize(ComparePrice constraintAnnotation) {
     }
     @Override
-    public boolean isValid(ProductCreateDTO productDto, ConstraintValidatorContext context) {
+    public boolean isValid(AdminCreateProductDTO productDto, ConstraintValidatorContext context) {
         if (productDto == null) {
             return true;  // Tránh NullPointerException
         }

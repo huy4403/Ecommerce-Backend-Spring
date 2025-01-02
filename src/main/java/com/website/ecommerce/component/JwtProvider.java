@@ -1,6 +1,7 @@
 package com.website.ecommerce.component;
 
 
+import com.website.ecommerce.exception.HandleException;
 import com.website.ecommerce.model.User;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
@@ -9,12 +10,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.HashMap;
 
 @Component
 public class JwtProvider {
     private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
     private String jwtSecret = "secret";
-    private int jwtExpiration = 86400;
+    private int jwtExpiration = 60;
 
     public String createToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -27,19 +29,24 @@ public class JwtProvider {
                 .compact();
     }
     public boolean validateToken(String token) {
+        HashMap<String, String> errors = new HashMap<>();
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
             return true;
         } catch (SignatureException e) {
-            logger.error("Invalid JWT signature -> Message: {}", e);
+            errors.put("SignatureException", "Chữ ký JWT không hợp lệ");
         } catch (MalformedJwtException e) {
-            logger.error("Invalid JWT token -> Message: {}", e);
+            errors.put("MalformedJwtException", "Token JWT không hợp lệ");
         } catch (ExpiredJwtException e) {
-            logger.error("Expired JWT token -> Message: {}", e);
+            errors.put("ExpiredJwtException", "Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại");
         } catch (UnsupportedJwtException e) {
-            logger.error("Unsupported JWT token -> Message: {}", e);
+            errors.put("UnsupportedJwtException", "Token JWT không được hỗ trợ");
         } catch (IllegalArgumentException e) {
-            logger.error("JWT claims string is empty -> Message: {}", e);
+            errors.put("IllegalArgumentException", "Chuỗi claims JWT trống");
+        }
+
+        if (!errors.isEmpty()) {
+            throw new HandleException(errors);
         }
         return false;
     }

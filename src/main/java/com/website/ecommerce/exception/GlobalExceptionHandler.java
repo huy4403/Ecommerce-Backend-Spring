@@ -17,8 +17,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
-    @ExceptionHandler(value = {ValidateException.class})
-    public ResponseEntity<HashMap<String, String>> handleValidateException(ValidateException e) {
+    @ExceptionHandler(value = {HandleException.class})
+    public ResponseEntity<HashMap<String, String>> handleValidateException(HandleException e) {
         return ResponseEntity.badRequest().body(e.getErrors());
     }
 

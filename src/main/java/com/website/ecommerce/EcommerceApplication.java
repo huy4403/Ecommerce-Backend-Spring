@@ -1,6 +1,6 @@
 package com.website.ecommerce;
 
-import com.website.ecommerce.service.StorageService;
+import com.website.ecommerce.service.Upload.StorageService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

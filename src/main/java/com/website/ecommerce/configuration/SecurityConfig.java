@@ -2,7 +2,7 @@ package com.website.ecommerce.configuration;
 
 import com.website.ecommerce.component.JwtEntryPoint;
 import com.website.ecommerce.filter.JwtTokenFilter;
-import com.website.ecommerce.service.UserService;
+import com.website.ecommerce.service.client.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,7 +42,7 @@ public class SecurityConfig {
 
     @Bean
     PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10);
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -63,17 +63,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/product/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/category/admin/**").hasRole("ADMIN")
-                        .requestMatchers("api/product/get-all").permitAll()
-                        .requestMatchers("api/product/get").permitAll()
-                        .requestMatchers("/api/product/pagination").permitAll()
-                        .requestMatchers("/api/product/search").permitAll()
-                        .requestMatchers("/api/category/get-all").permitAll()
-                        .requestMatchers("/api/category/get/").permitAll()
+                        .requestMatchers("/api/public/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
-                ).exceptionHandling(exception -> exception.authenticationEntryPoint(jwtEntryPoint))
+                ).exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(jwtEntryPoint))
                 .sessionManagement(management  -> management
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
