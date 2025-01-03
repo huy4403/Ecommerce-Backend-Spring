@@ -1,22 +1,18 @@
 package com.website.ecommerce.component;
 
-
-import com.website.ecommerce.exception.HandleException;
 import com.website.ecommerce.model.User;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-
 import java.util.Date;
-import java.util.HashMap;
 
 @Component
 public class JwtProvider {
-    private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(JwtEntryPoint.class);
     private String jwtSecret = "secret";
-    private int jwtExpiration = 60;
+    private int jwtExpiration = 86400;
 
     public String createToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -29,28 +25,26 @@ public class JwtProvider {
                 .compact();
     }
     public boolean validateToken(String token) {
-        HashMap<String, String> errors = new HashMap<>();
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
             return true;
-        } catch (SignatureException e) {
-            errors.put("SignatureException", "Chữ ký JWT không hợp lệ");
-        } catch (MalformedJwtException e) {
-            errors.put("MalformedJwtException", "Token JWT không hợp lệ");
         } catch (ExpiredJwtException e) {
-            errors.put("ExpiredJwtException", "Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại");
+            logger.error("Token has expired -> Message: {}", e.getMessage());
+            throw e;
         } catch (UnsupportedJwtException e) {
-            errors.put("UnsupportedJwtException", "Token JWT không được hỗ trợ");
+            logger.error("Unsupported token -> Message: {}", e.getMessage());
+            throw e;
+        } catch (MalformedJwtException e) {
+            logger.error("Invalid token -> Message: {}", e.getMessage());
+            throw e;
+        } catch (SignatureException e) {
+            logger.error("Invalid token signature -> Message: {}", e.getMessage());
+            throw e;
         } catch (IllegalArgumentException e) {
-            errors.put("IllegalArgumentException", "Chuỗi claims JWT trống");
+            logger.error("Token is missing or invalid -> Message: {}", e.getMessage());
+            throw e;
         }
-
-        if (!errors.isEmpty()) {
-            throw new HandleException(errors);
-        }
-        return false;
     }
-
     public String getUserNameFromToken(String token) {
         String userName = Jwts.parser().setSigningKey(jwtSecret)
                 .parseClaimsJws(token).getBody().getSubject();

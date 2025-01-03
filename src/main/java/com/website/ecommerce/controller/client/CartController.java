@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
-@CrossOrigin
+@CrossOrigin("*")
 @RestController
 @RequestMapping("api/user/cart")
 public class CartController {

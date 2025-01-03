@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @AllArgsConstructor
-@CrossOrigin
+@CrossOrigin("*")
 @RestController
 @RequestMapping("api/user/cart-item")
 public class CartItemController {

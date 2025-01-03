@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@CrossOrigin
+@CrossOrigin("*")
 @RestController
 @RequestMapping("api/user/info")
 public class UserController {

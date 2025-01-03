@@ -3,13 +3,14 @@ package com.website.ecommerce.filter;
 import com.website.ecommerce.component.JwtProvider;
 import com.website.ecommerce.model.User;
 import com.website.ecommerce.service.auth.AuthService;
-import com.website.ecommerce.service.client.UserService;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +20,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 public class JwtTokenFilter extends OncePerRequestFilter {
-    private static final Logger logger = LoggerFactory.getLogger(JwtTokenFilter.class);
 
     @Autowired
     private JwtProvider jwtProvider;
@@ -30,18 +30,48 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             String token = GetJwt(request);
-            if(token != null && jwtProvider.validateToken(token)) {
+            if (token != null) {
+                jwtProvider.validateToken(token);  // validate trước để bắt lỗi nếu có
+
                 String username = jwtProvider.getUserNameFromToken(token);
                 User user = (User) authService.loadUserByUsername(username);
+
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         user, null, user.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
+        } catch (ExpiredJwtException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            exception(response, "Expired", "Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại");
+            return;
+        } catch (UnsupportedJwtException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            exception(response, "Unsupported", "Token JWT không được hỗ trợ");
+            return;
+        } catch (MalformedJwtException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            exception(response, "Invalid", "Token JWT không đúng định dạng");
+            return;
+        } catch (SignatureException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            exception(response, "Signature", "Chữ ký JWT không chính xác");
+            return;
+        } catch (IllegalArgumentException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            exception(response, "invalid", "Token JWT không chính xác");
+            return;
         } catch (Exception e) {
-            logger.error("Can't set user authentication -> Message: {}", e);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            exception(response, "unexpected", "Đã xảy ra lỗi không mong muốn");
+            return;
         }
         filterChain.doFilter(request, response);
+    }
+    private void exception(HttpServletResponse response, String typeErrors, String message) throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write("{\""+ typeErrors + "\": \"" + message +"\"}");
     }
     public String GetJwt(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
