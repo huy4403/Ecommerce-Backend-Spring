@@ -1,8 +1,10 @@
 package com.website.ecommerce.controller.client;
 
+import com.website.ecommerce.dtos.userDTOs.UserChangePasswordDTO;
 import com.website.ecommerce.dtos.userDTOs.UserUpdateDTO;
 import com.website.ecommerce.model.User;
 import com.website.ecommerce.service.client.UserService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @NoArgsConstructor
 @CrossOrigin("*")
 @RestController
-@RequestMapping("api/user/info")
+@RequestMapping("api/user")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -29,5 +31,11 @@ public class UserController {
     public ResponseEntity<?> showUser(@PathVariable Long id) {
         User user = userService.getUserById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @PutMapping("change-password")
+    public ResponseEntity<?> changePassword(@Valid @ModelAttribute UserChangePasswordDTO userChangePasswordDTO) {
+        User userChangePass = userService.changePassword(userChangePasswordDTO);
+        return new ResponseEntity<>(userChangePass, HttpStatus.OK);
     }
 }

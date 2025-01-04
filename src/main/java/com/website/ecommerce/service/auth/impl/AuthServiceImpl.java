@@ -37,8 +37,6 @@ public class AuthServiceImpl implements AuthService {
     private UserRepository userRepository;
     @Autowired
     private CartService cartService;
-    @Autowired
-    private AdminRoleService adminRoleService;
 
     private PasswordEncoder passwordEncoder;
     private AuthenticationManager authenticationManager;

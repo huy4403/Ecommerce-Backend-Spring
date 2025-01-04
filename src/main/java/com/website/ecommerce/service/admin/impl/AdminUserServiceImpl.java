@@ -31,7 +31,6 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     @Autowired
     private CartService cartService;
-
     private PasswordEncoder passwordEncoder;
 
     @Autowired

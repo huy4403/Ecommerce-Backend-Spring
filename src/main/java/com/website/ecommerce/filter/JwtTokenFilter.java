@@ -20,7 +20,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 public class JwtTokenFilter extends OncePerRequestFilter {
-
+    public static String tokenSession;
     @Autowired
     private JwtProvider jwtProvider;
     @Autowired
@@ -30,12 +30,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             String token = GetJwt(request);
+            tokenSession = token;
             if (token != null) {
                 jwtProvider.validateToken(token);  // validate trước để bắt lỗi nếu có
 
                 String username = jwtProvider.getUserNameFromToken(token);
                 User user = (User) authService.loadUserByUsername(username);
-
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         user, null, user.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -43,7 +43,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             }
         } catch (ExpiredJwtException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            exception(response, "Expired", "Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại");
+            exception(response, "Unauthorized", "Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại");
             return;
         } catch (UnsupportedJwtException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -54,12 +54,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             exception(response, "Invalid", "Token JWT không đúng định dạng");
             return;
         } catch (SignatureException e) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             exception(response, "Signature", "Chữ ký JWT không chính xác");
             return;
         } catch (IllegalArgumentException e) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            exception(response, "invalid", "Token JWT không chính xác");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            exception(response, "Unauthorized", "Vui lòng đăng nhập để thực hiện thao tác này");
             return;
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

@@ -2,8 +2,10 @@ package com.website.ecommerce.service.client.impl;
 
 import com.website.ecommerce.component.JwtProvider;
 import com.website.ecommerce.dtos.authDTOs.AuthRegistrationDTO;
+import com.website.ecommerce.dtos.userDTOs.UserChangePasswordDTO;
 import com.website.ecommerce.dtos.userDTOs.UserUpdateDTO;
 import com.website.ecommerce.exception.HandleException;
+import com.website.ecommerce.filter.JwtTokenFilter;
 import com.website.ecommerce.model.Cart;
 import com.website.ecommerce.model.Role;
 import com.website.ecommerce.model.User;
@@ -31,6 +33,13 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private JwtProvider jwtProvider;
+
+    @Autowired
+    @Lazy
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public User update(UserUpdateDTO userUpdateDTO) {
@@ -68,6 +77,26 @@ public class UserServiceImpl implements UserService {
             throw new HandleException(errors);
         }
         return user.get();
+    }
+
+    @Override
+    public User changePassword(UserChangePasswordDTO userChangePasswordDTO) {
+        if(!userChangePasswordDTO.getPassword().equals(userChangePasswordDTO.getPasswordconfirm())) {
+            HashMap<String, String> errors = new HashMap<>();
+            errors.put("passwordconfirm", "Mật khẩu mới không khớp");
+            throw new HandleException(errors);
+        }
+        Long userId = jwtProvider.getUserIdFromToken(JwtTokenFilter.tokenSession);
+        User existUser = getUserById(userId);
+        boolean isMatch = passwordEncoder.matches(userChangePasswordDTO.getOldPassword(), existUser.getPassword());
+        if(!isMatch) {
+            HashMap<String, String> errors = new HashMap<>();
+            errors.put("passwordNotMatch", "Mật khẩu cũ không khớp");
+            throw new HandleException(errors);
+        }
+        existUser.setPassword(passwordEncoder.encode(userChangePasswordDTO.getPassword()));
+        existUser = userRepository.save(existUser);
+        return existUser;
     }
 
     //Security

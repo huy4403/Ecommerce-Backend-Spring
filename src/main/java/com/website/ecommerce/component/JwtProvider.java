@@ -12,7 +12,7 @@ import java.util.Date;
 public class JwtProvider {
     private static final Logger logger = LoggerFactory.getLogger(JwtEntryPoint.class);
     private String jwtSecret = "secret";
-    private int jwtExpiration = 86400;
+    private int jwtExpiration = 84600;
 
     public String createToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -35,7 +35,7 @@ public class JwtProvider {
             logger.error("Unsupported token -> Message: {}", e.getMessage());
             throw e;
         } catch (MalformedJwtException e) {
-            logger.error("Invalid token -> Message: {}", e.getMessage());
+            logger.error("Invalid token-> Message: {}", e.getMessage());
             throw e;
         } catch (SignatureException e) {
             logger.error("Invalid token signature -> Message: {}", e.getMessage());
