@@ -12,12 +12,11 @@ public class ComparePriceValidator implements ConstraintValidator<ComparePrice, 
     @Override
     public boolean isValid(AdminCreateProductDTO productDto, ConstraintValidatorContext context) {
         if (productDto == null) {
-            return true;  // Tránh NullPointerException
+            return true;
         }
         Integer price = productDto.getPrice();
         Integer importPrice = productDto.getImportPrice();
         if (importPrice != null && price != null && importPrice >= price) {
-            // Thêm thông báo lỗi cho trường passwordcomfirm
             context.buildConstraintViolationWithTemplate("Giá bán phải lớn hơn giá nhập!")
                     .addPropertyNode("price")
                     .addConstraintViolation();

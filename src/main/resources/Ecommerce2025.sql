@@ -12,6 +12,7 @@ CREATE TABLE `users` (
   `name` varchar(255) NOT NULL,
   `phone` varchar(10) UNIQUE NOT NULL,
   `email` varchar(255) UNIQUE NOT NULL,
+  `address` varchar(255) NOT NULL,
   `gender` varchar(5) NOT NULL,
   `birthday` date NOT NULL,
   `role_id` int DEFAULT 2,

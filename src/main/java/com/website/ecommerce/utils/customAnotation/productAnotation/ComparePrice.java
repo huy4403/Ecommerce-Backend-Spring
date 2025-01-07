@@ -8,8 +8,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = ComparePriceValidator.class)  // Đánh dấu validator mà bạn sẽ tạo
-@Target({ ElementType.TYPE })  // Áp dụng cho class (TYPE)
+@Constraint(validatedBy = ComparePriceValidator.class)
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ComparePrice {
     String message() default "Giá bán phải lớn hơn giá nhập!";
