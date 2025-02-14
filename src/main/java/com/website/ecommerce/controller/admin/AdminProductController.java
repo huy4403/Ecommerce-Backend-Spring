@@ -56,10 +56,4 @@ public class AdminProductController {
         List<Product> products = adminProductService.getAllProducts();
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
-
-    @GetMapping("/search")
-    public ResponseEntity<?> searchProductsByName(@RequestParam("name") String name) {
-        List<Product> products = adminProductService.findByNameContaining(name);
-        return new ResponseEntity<>(products, HttpStatus.OK);
-    }
 }

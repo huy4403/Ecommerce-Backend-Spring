@@ -20,7 +20,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 public class JwtTokenFilter extends OncePerRequestFilter {
-    public static String tokenSession;
     @Autowired
     private JwtProvider jwtProvider;
     @Autowired
@@ -30,7 +29,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             String token = GetJwt(request);
-            tokenSession = token;
             if (token != null) {
                 jwtProvider.validateToken(token);  // validate trước để bắt lỗi nếu có
 

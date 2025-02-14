@@ -1,7 +1,5 @@
 package com.website.ecommerce.service.client.impl;
 
-import com.website.ecommerce.component.JwtProvider;
-import com.website.ecommerce.filter.JwtTokenFilter;
 import com.website.ecommerce.model.Cart;
 import com.website.ecommerce.model.CartItem;
 import com.website.ecommerce.model.User;
@@ -10,6 +8,7 @@ import com.website.ecommerce.service.client.CartItemService;
 import com.website.ecommerce.service.client.CartService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,14 +21,10 @@ public class CartItemServiceImpl implements CartItemService {
     private CartItemRepository cartItemRepository;
     @Autowired
     private CartService cartService;
-
-    @Autowired
-    private JwtProvider jwtProvider;
     @Override
     public CartItem addCartItem(CartItem cartItem) {
-        String token = JwtTokenFilter.tokenSession;
-        Long userId = jwtProvider.getUserIdFromToken(token);
-        Cart cart = cartService.getCartByUserId(userId);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Cart cart = cartService.getCartByUserId(user.getId());
         cartItem.setCart(cart);
         int quantity = quantityByCartIdAndProductId(cartItem.getCart().getId(), cartItem.getProduct().getId());
         if(quantity == 0){

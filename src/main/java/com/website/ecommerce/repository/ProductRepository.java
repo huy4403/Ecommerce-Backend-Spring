@@ -13,16 +13,14 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Boolean existsProductByName(String name);
 
-    Product findProductByName(String name);
-
-    List<Product> findProductByCategory(Category category);
-
-    @Query("SELECT p FROM Product p WHERE p.name LIKE %:name%")
-    List<Product> findByNameContaining(@Param("name") String name);
-
     @Query("SELECT COUNT(p) > 0 FROM Product p WHERE p.name = :name AND p.id != :id")
     Boolean existsProductByNameDiffId(String name, Long id);
 
     @Query("SELECT COUNT(p) FROM Product p")
     Long countAllProducts();
+
+    @Query("SELECT p FROM Product p WHERE " +
+            "(:name IS NULL OR p.name LIKE %:name%) AND " +
+            "(:categoryId IS NULL OR p.category.id = :categoryId)")
+    List<Product> findByNameContainingAndCategory(@Param("name") String name, @Param("categoryId") Integer categoryId);
 }

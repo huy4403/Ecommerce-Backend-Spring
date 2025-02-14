@@ -9,6 +9,7 @@ import org.hibernate.annotations.NaturalId;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "roles")
 public class Role extends BaseEntity{
     @Id

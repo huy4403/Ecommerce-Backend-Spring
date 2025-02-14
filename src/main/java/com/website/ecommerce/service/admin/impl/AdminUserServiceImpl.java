@@ -60,6 +60,7 @@ public class AdminUserServiceImpl implements AdminUserService {
                 .password(passwordEncoder.encode(adminCreateUserDTO.getPassword()))
                 .phone(adminCreateUserDTO.getPhone())
                 .email(adminCreateUserDTO.getEmail())
+                .address(adminCreateUserDTO.getAddress())
                 .gender(adminCreateUserDTO.getGender())
                 .birthday(adminCreateUserDTO.getBirthday())
                 .role(adminCreateUserDTO.getRole())
@@ -91,9 +92,10 @@ public class AdminUserServiceImpl implements AdminUserService {
         }
         existUser.setName(adminUpdateUserDTO.getName());
         existUser.setUsername(adminUpdateUserDTO.getUsername());
-        existUser.setPassword(adminUpdateUserDTO.getPassword());
+        existUser.setPassword(passwordEncoder.encode(adminUpdateUserDTO.getPassword()));
         existUser.setPhone(adminUpdateUserDTO.getPhone());
         existUser.setEmail(adminUpdateUserDTO.getEmail());
+        existUser.setAddress(adminUpdateUserDTO.getAddress());
         existUser.setGender(adminUpdateUserDTO.getGender());
         existUser.setBirthday(adminUpdateUserDTO.getBirthday());
         existUser.setRole(adminUpdateUserDTO.getRole());

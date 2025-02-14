@@ -64,7 +64,7 @@ public class SecurityConfig {
 
         return authenticationManagerBuilder.build();
     }
-    private final String[] PUBLIC_ENDPOINTS = {"/api/auth/**", "/api/public/**"};
+    private final String[] PUBLIC_ENDPOINTS = {"/api/auth/**", "/api/public/**", "/login"};
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -73,6 +73,7 @@ public class SecurityConfig {
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/public/**").permitAll()
                         .anyRequest().authenticated()
                 ).exceptionHandling(exception -> exception
                         .authenticationEntryPoint(jwtEntryPoint)

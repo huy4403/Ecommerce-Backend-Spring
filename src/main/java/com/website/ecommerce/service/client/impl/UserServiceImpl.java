@@ -1,24 +1,18 @@
 package com.website.ecommerce.service.client.impl;
 
-import com.website.ecommerce.component.JwtProvider;
-import com.website.ecommerce.dtos.authDTOs.AuthRegistrationDTO;
 import com.website.ecommerce.dtos.userDTOs.UserChangePasswordDTO;
 import com.website.ecommerce.dtos.userDTOs.UserUpdateDTO;
 import com.website.ecommerce.exception.HandleException;
-import com.website.ecommerce.filter.JwtTokenFilter;
-import com.website.ecommerce.model.Cart;
 import com.website.ecommerce.model.Role;
 import com.website.ecommerce.model.User;
 import com.website.ecommerce.repository.UserRepository;
-import com.website.ecommerce.service.client.CartService;
-import com.website.ecommerce.service.admin.AdminRoleService;
 import com.website.ecommerce.service.client.UserService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,9 +27,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private JwtProvider jwtProvider;
 
     @Autowired
     @Lazy
@@ -61,8 +52,11 @@ public class UserServiceImpl implements UserService {
         existUser.setName(userUpdateDTO.getName());
         existUser.setEmail(userUpdateDTO.getEmail());
         existUser.setPhone(userUpdateDTO.getPhone());
+        existUser.setAddress(userUpdateDTO.getAddress());
         existUser.setGender(userUpdateDTO.getGender());
         existUser.setBirthday(userUpdateDTO.getBirthday());
+        Role role = Role.builder().id(2).build();
+        existUser.setRole(role);
 
         User updateUser = userRepository.save(existUser);
         return updateUser;
@@ -86,8 +80,7 @@ public class UserServiceImpl implements UserService {
             errors.put("passwordconfirm", "Mật khẩu mới không khớp");
             throw new HandleException(errors);
         }
-        Long userId = jwtProvider.getUserIdFromToken(JwtTokenFilter.tokenSession);
-        User existUser = getUserById(userId);
+        User existUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         boolean isMatch = passwordEncoder.matches(userChangePasswordDTO.getOldPassword(), existUser.getPassword());
         if(!isMatch) {
             HashMap<String, String> errors = new HashMap<>();
@@ -95,8 +88,8 @@ public class UserServiceImpl implements UserService {
             throw new HandleException(errors);
         }
         existUser.setPassword(passwordEncoder.encode(userChangePasswordDTO.getPassword()));
-        existUser = userRepository.save(existUser);
-        return existUser;
+        User userChangePassword = userRepository.save(existUser);
+        return userChangePassword;
     }
 
     //Security

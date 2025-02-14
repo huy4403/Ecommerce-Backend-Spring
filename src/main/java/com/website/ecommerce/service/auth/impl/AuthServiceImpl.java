@@ -11,7 +11,6 @@ import com.website.ecommerce.repository.UserRepository;
 import com.website.ecommerce.response.UserLoginResponse;
 import com.website.ecommerce.service.auth.AuthService;
 import com.website.ecommerce.service.client.CartService;
-import com.website.ecommerce.service.admin.AdminRoleService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -65,14 +64,17 @@ public class AuthServiceImpl implements AuthService {
         if(!errors.isEmpty()){
             throw new HandleException(errors);
         }
+        Role role = Role.builder().id(2).build();
         User user = User.builder()
                 .name(userDto.getName())
                 .username(userDto.getUsername())
                 .password(passwordEncoder.encode(userDto.getPassword()))
                 .phone(userDto.getPhone())
                 .email(userDto.getEmail())
+                .address(userDto.getAddress())
                 .gender(userDto.getGender())
                 .birthday(userDto.getBirthday())
+                .role(role)
                 .build();
 
         User registerUser = userRepository.save(user);

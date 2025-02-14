@@ -25,11 +25,5 @@ public interface AdminProductService {
 
     Page<Product> getProductPage(int page, int size);
 
-    Product findProductByName(String name);
-
-    List<Product> findProductByCategory(Category category);
-
-    List<Product> findByNameContaining(String name);
-
     Boolean existsProductByNameDiffId(String name, Long id);
 }

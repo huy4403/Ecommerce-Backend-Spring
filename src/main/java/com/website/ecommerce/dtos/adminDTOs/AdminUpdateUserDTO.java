@@ -6,7 +6,6 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
-@PasswordConfirm
 public class AdminUpdateUserDTO {
 
     private Long id;
@@ -27,9 +26,6 @@ public class AdminUpdateUserDTO {
     @Size(min = 6, message = "Mật khẩu phải có độ dài từ 6 ký tự trở lên")
     private String password;
 
-    @NotBlank(message = "Mật khẩu xác nhận không được để trống!")
-    private String passwordcomfirm;
-
     @NotBlank(message = "Số điện thoại không được để trống!")
     @Pattern(
             regexp = "^(0\\d{9}|84\\d{9,10})$",
@@ -44,6 +40,9 @@ public class AdminUpdateUserDTO {
     )
     private String email;
 
+    @NotBlank(message = "Vui lòng nhập địa chỉ")
+    private String address;
+
     @NotBlank(message = "Vui lòng chọn giới tính")
     private String gender;
 
@@ -56,14 +55,14 @@ public class AdminUpdateUserDTO {
     public AdminUpdateUserDTO() {
     }
 
-    public AdminUpdateUserDTO(Long id, String name, String username, String password, String passwordcomfirm, String phone, String email, String gender, LocalDate birthday, Role role) {
+    public AdminUpdateUserDTO(Long id, String name, String username, String password, String phone, String email,String address, String gender, LocalDate birthday, Role role) {
         this.id = id;
         this.name = name;
         this.username = username;
         this.password = password;
-        this.passwordcomfirm = passwordcomfirm;
         this.phone = phone;
         this.email = email;
+        this.address = address;
         this.gender = gender;
         this.birthday = birthday;
         this.role = role;
@@ -101,14 +100,6 @@ public class AdminUpdateUserDTO {
         this.password = password;
     }
 
-    public String getPasswordcomfirm() {
-        return passwordcomfirm;
-    }
-
-    public void setPasswordcomfirm(String passwordcomfirm) {
-        this.passwordcomfirm = passwordcomfirm;
-    }
-
     public String getPhone() {
         return phone;
     }
@@ -123,6 +114,14 @@ public class AdminUpdateUserDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getGender() {

@@ -42,6 +42,9 @@ public class AdminCreateUserDTO {
     )
     private String email;
 
+    @NotBlank(message = "Vui lòng nhập địa chỉ")
+    private String address;
+
     @NotBlank(message = "Vui lòng chọn giới tính")
     private String gender;
 
@@ -54,13 +57,14 @@ public class AdminCreateUserDTO {
     public AdminCreateUserDTO() {
     }
 
-    public AdminCreateUserDTO(String name, String username, String password, String passwordcomfirm, String phone, String email, String gender, LocalDate birthday, Role role) {
+    public AdminCreateUserDTO(String name, String username, String password, String passwordcomfirm, String phone, String email,String address ,String gender, LocalDate birthday, Role role) {
         this.name = name;
         this.username = username;
         this.password = password;
         this.passwordcomfirm = passwordcomfirm;
         this.phone = phone;
         this.email = email;
+        this.address = address;
         this.gender = gender;
         this.birthday = birthday;
         this.role = role;
@@ -112,6 +116,14 @@ public class AdminCreateUserDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getGender() {
